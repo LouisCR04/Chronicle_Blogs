@@ -1,10 +1,12 @@
 """
-Creates MongoDb Connection
+Defines collections in the Database
 """
 
-from pymongo import MongoClient
+from mongoengine import Document, StringField, DictField, BooleanField
 
-client = MongoClient("localhost", 27017)
-
-commodities = db["commodities"]
-entities = db["entitiies"]
+class Commodity(Document):
+    type = StringField(required=True, max_length=50) #e.g. room/finances
+    name = StringField(required=True, max_length=100) #e.g. room101
+    description = StringField(max_length=500) #optional
+    factors = DictField() # Store attributes like capacity and location
+    available = BooleanField(default=True)

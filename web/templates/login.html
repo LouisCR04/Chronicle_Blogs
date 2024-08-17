@@ -6,21 +6,6 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Join</legend>
                 <div class="form-group">
-                    {{ form.username.label(class="form-control-label") }}
-
-		    {% if form.username.errors %}
-			{{ form.username(class="form-control form-control-lg is-invalid") }}
-			    <div class="invalid-feedback">
-				{% for error in form.username.errors %}
-				    <span>{{ error }}</span>
-				{% endfor %}
-			    <div/>
-		    {% else %}
-		    {{ form.username(class="form-control form-control-lg") }}
-		    {% endif %}
-
-                </div>
-                <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
 		    {% if form.email.errors %}
                         {{ form.email(class="form-control form-control-lg is-invalid") }}
@@ -46,28 +31,22 @@
                     {{ form.password(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group">
-                    {{ form.confirm_p.label(class="form-control-label") }}
-		    {% if form.confirm_p.errors %}
-                        {{ form.confirm_p(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.confirm_p.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            <div/>
-                    {% else %}
-                    {{ form.confirm_p(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
+		<div class="form-check">
+		    {{ form.remember(class="form-check-input") }}
+		    {{ form.remember.label(class="form-check-label") }}
+		</div>
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn-outline-info") }}
             </div>
+	    <small class="text-muted ml-2">
+		<a href="#">Forgot Password?</a>
+	    </small>
         </form>
     </div>
     <div class="border-top pt-3">
         <small class="text-muted">
-            Already have an Account? <a class="ml-2" href="{{ url_for('login')}}">Sign In</a>
+            Create Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up</a>
         </small>
     </div>
 {% endblock content %}

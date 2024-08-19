@@ -4,6 +4,10 @@ Main Flask Router
 """
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import RegForm, LoginForm
+from flask_mongoengine import MongoEngine
+from database import Post
+
+
 app = Flask(__name__)
 
 """
@@ -11,21 +15,15 @@ import os
 SECRET_KEY = os.urandom(32)
 """
 app.config['SECRET_KEY'] = '06a0233352eacd9d1c3133047eef7c10'
+app.config['MONGODB_SETTINGS'] = {
+    'db': 'f_blog',
+    'host': 'localhost',
+    'port': 27017
+}
 
-posts = [
-    {
-        'author': 'Ichibe Hyosube',
-        'title': 'Zanpakuto',
-        'content': 'First Zanpakuto',
-        'date_posted': 'January 1, 2020'
-    },
-    {
-        'author': 'Aizen Souske',
-        'title': 'Hogyoku',
-        'content': 'First Hogyoku',
-        'date_posted': 'January 14, 2021'
-    }
-]
+
+"""Init MongoEngine"""
+db = MongoEngine(app)
 
 @app.route("/")
 @app.route("/home")

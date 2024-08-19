@@ -2,8 +2,8 @@
 """
 Mock data creation for the database
 """
-from database import User, Post
-from db_config import mon_con
+from models.engine.database import User, Post
+from models.engine.db_config import mon_con
 
 # Create a new user
 user = User(username='Aizen Souske', password='password1', email='aizen@demo.com').save()

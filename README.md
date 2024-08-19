@@ -1,1 +1,1 @@
-# Dynamic Resource Allocator
+# Chronicle Blogs

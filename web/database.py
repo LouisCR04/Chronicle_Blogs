@@ -2,18 +2,8 @@
 Database Engine
 """
 
-from mongoengine import Document, StringField, DictField, ReferenceField
+from mongoengine import Document, StringField, DictField, ReferenceField, DateTimeField
 from datetime import datetime
-
-class Post(Document):
-    author = ReferenceField(User, required=True, unique-True)
-    title = StringField(required=True, max_length=100)
-    content = StringField(required=True)
-    date_posted = DateTimeField(required=True, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"Post('{self.title}', '{self.date_posted}')"
-
 
 class User(Document):
     username = StringField(required=True, max_length=20, unique=True)
@@ -26,3 +16,12 @@ class User(Document):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', self.image_file)"
+
+class Post(Document):
+    author = ReferenceField(User, required=True, unique=True)
+    title = StringField(required=True, max_length=100)
+    content = StringField(required=True)
+    date_posted = DateTimeField(required=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"Post('{self.title}', '{self.date_posted}')"

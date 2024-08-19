@@ -5,7 +5,8 @@ Main Flask Router
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import RegForm, LoginForm
 from flask_mongoengine import MongoEngine
-from database import Post
+from database import Post, User
+from db_config import mon_con
 
 
 app = Flask(__name__)

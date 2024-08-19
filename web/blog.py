@@ -9,7 +9,6 @@ from database import Post
 
 
 app = Flask(__name__)
-
 """
 import os
 SECRET_KEY = os.urandom(32)
@@ -28,6 +27,7 @@ db = MongoEngine(app)
 @app.route("/")
 @app.route("/home")
 def home():
+    posts = Post.objects.all()
     return render_template("home.html", posts=posts)
 
 @app.route("/about")

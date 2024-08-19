@@ -22,9 +22,6 @@ app.config['MONGODB_SETTINGS'] = {
 }
 
 
-"""Init MongoEngine"""
-db = MongoEngine(app)
-
 @app.route("/")
 @app.route("/home")
 def home():

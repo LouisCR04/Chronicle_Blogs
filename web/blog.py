@@ -3,7 +3,8 @@
 Main Flask Router
 """
 from flask import Flask, render_template, url_for, flash, redirect
-from flask_login import LoginManager, login_user, current_user, logout_user
+from flask_login import LoginManager, login_user, current_user, \
+logout_user, login_required
 from forms.forms import RegForm, LoginForm, PostsForm
 from flask_mongoengine import MongoEngine
 from models.engine.database import User, Post
@@ -24,7 +25,7 @@ app.config['MONGODB_SETTINGS'] = {
 }
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.init_app(app)
+login_manager.login_view = 'login'
 db = mon_con
 
 @login_manager.user_loader
@@ -97,6 +98,7 @@ def logout():
     return redirect(url_for('home'))
     
 @app.route("/account")
+@login_required
 def account():
     return render_template("account.html", title='My account')
 

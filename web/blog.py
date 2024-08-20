@@ -96,6 +96,10 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
     
+@app.route("/account")
+def account():
+    return render_template("account.html", title='My account')
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

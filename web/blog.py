@@ -3,12 +3,12 @@
 Main Flask Router
 """
 from flask import Flask, render_template, url_for, flash, redirect
+from flask_login import LoginManager, login_user, current_user
 from forms.forms import RegForm, LoginForm, PostsForm
 from flask_mongoengine import MongoEngine
 from models.engine.database import User, Post
 from models.engine.db_config import mon_con
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, login_user
 
 
 app = Flask(__name__)
@@ -24,11 +24,12 @@ app.config['MONGODB_SETTINGS'] = {
 }
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+login_manager.init_app(app)
 db = mon_con
 
 @login_manager.user_loader
-def load_user(email):
-    return User.objects(email=email).first()
+def load_user(user_id):
+    return User.objects(id=user_id).first()
 
 
 @app.route("/")
@@ -43,6 +44,8 @@ def about():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegForm()
 
     if form.validate_on_submit():
@@ -56,6 +59,8 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()
@@ -79,6 +84,12 @@ def posts():
         return redirect(url_for('home'))
     return render_template("posts.html", title='Post', form=form)
 
+@app.route("/logedin")
+def loged_in():
+    if current_user.is_authenticated:
+        return f"{ current_user.email } is logged in" 
+    else:
+        return "Not logged in"
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

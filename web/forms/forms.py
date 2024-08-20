@@ -2,8 +2,16 @@
 forms file
 """
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, BooleanField,\
+TextAreaField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from models.engine.database import User, Post
+
+class PostsForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
 
 class RegForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(),
@@ -14,6 +22,18 @@ class RegForm(FlaskForm):
                                      validators=[DataRequired(),
                                      EqualTo('password')])
     submit = SubmitField('Sign Up')
+
+    def validate_username(self, username):
+        from blog import db
+        user = User.objects(username=username.data).first()
+        if user:
+            raise ValidationError('User already exists')
+    
+    def validate_email(self, email):
+        from blog import db
+        email = User.objects(email=email.data).first()
+        if email:
+            raise ValidationError('Email already exists')
 
 
 class LoginForm(FlaskForm):

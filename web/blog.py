@@ -8,7 +8,7 @@ from flask_mongoengine import MongoEngine
 from models.engine.database import User, Post
 from models.engine.db_config import mon_con
 from flask_bcrypt import Bcrypt
-#from flask_login import LoginManager, login_required 
+from flask_login import LoginManager, login_user
 
 
 app = Flask(__name__)
@@ -23,7 +23,12 @@ app.config['MONGODB_SETTINGS'] = {
     'port': 27017
 }
 bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
 db = mon_con
+
+@login_manager.user_loader
+def load_user(email):
+    return User.objects(email=email).first()
 
 
 @app.route("/")
@@ -53,10 +58,11 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'aizen@gmail.com' and form.password.data\
-            == '1234':
-            flash('Login successful!', 'success')
-            return redirect('home')
+        user = User.objects(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password,
+                                               form.password.data):
+            login_user(user, remember=form.remember.data)
+            return redirect(url_for('home'))
         else:
             flash("Login unsuccessful! Check email or password.", 'danger')
     return render_template("login.html", title='login', form=form)

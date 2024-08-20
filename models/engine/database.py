@@ -4,8 +4,9 @@ Database Engine
 
 from mongoengine import Document, StringField, DictField, ReferenceField, DateTimeField
 from datetime import datetime
+from flask_login import UserMixin
 
-class User(Document):
+class User(Document, UserMixin):
     username = StringField(required=True, max_length=20, unique=True)
     email = StringField(required=True, max_length=120, unique=True)
     image_file = StringField(required=True, max_length=120, default='default.jpg')

@@ -3,7 +3,7 @@
 Main Flask Router
 """
 from flask import Flask, render_template, url_for, flash, redirect
-from flask_login import LoginManager, login_user, current_user
+from flask_login import LoginManager, login_user, current_user, logout_user
 from forms.forms import RegForm, LoginForm, PostsForm
 from flask_mongoengine import MongoEngine
 from models.engine.database import User, Post
@@ -90,6 +90,12 @@ def loged_in():
         return f"{ current_user.email } is logged in" 
     else:
         return "Not logged in"
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+    
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

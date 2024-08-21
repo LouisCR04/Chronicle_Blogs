@@ -19,10 +19,16 @@ class User(Document, UserMixin):
         return f"User('{self.username}', '{self.email}', self.image_file)"
 
 class Post(Document):
-    author = ReferenceField(User, required=True, unique=True)
+    author = ReferenceField(User, required=True)
     title = StringField(required=True, max_length=100)
     content = StringField(required=True)
     date_posted = DateTimeField(required=True, default=datetime.utcnow)
+
+    meta = {
+        'indexes': [
+            {'fields': ('author', 'title'), 'unique': True}
+        ]
+    }
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"

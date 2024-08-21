@@ -132,5 +132,18 @@ def upd_post(post_id):
     return render_template('c_post.html', title='Update Post',
                            form=form, legend='Update Post')
 
+@app.route("/post/int: <post_id>/delete", methods=['POST'])
+@login_required
+def del_post(post_id):
+    post = Post.objects(id=post_id).first()
+    if not post:
+        return "Post not found", 404
+    if post.author != current_user:
+        abort(403)
+    post.delete()
+    flash('Post has been deleted!', 'success')
+    return redirect(url_for('home'))
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -6,7 +6,7 @@ from flask import Flask, render_template, url_for, flash, redirect, \
 abort, request
 from flask_login import LoginManager, login_user, current_user, \
 logout_user, login_required
-from forms.forms import RegForm, LoginForm, PostsForm
+from forms.forms import RegForm, LoginForm, PostsForm, UpdateAcctForm
 from flask_mongoengine import MongoEngine
 from models.engine.database import User, Post
 from models.engine.db_config import mon_con
@@ -39,6 +39,7 @@ def load_user(user_id):
 def home():
     posts = Post.objects.all()
     return render_template("home.html", posts=posts)
+
 
 @app.route("/about")
 def about():
@@ -99,10 +100,24 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
     
-@app.route("/account")
+
+@app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
-    return render_template("account.html", title='My account')
+    form = UpdateAcctForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        #current_user.image_file = form.image_file.data
+        User.save()
+        flash('Account Updated Successfully', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    img_file = url_for('static', filename='prof_pics/' + current_user.image_file)
+    return render_template("account.html", title='Profile',
+                           form=form, image_file=img_file)
 
 @app.route("/post/int: <post_id>")
 def post(post_id):

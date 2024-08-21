@@ -6,6 +6,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField,\
 TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from models.engine.database import User, Post
+from flask_login import current_user
 
 class PostsForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
@@ -34,6 +35,27 @@ class RegForm(FlaskForm):
         email = User.objects(email=email.data).first()
         if email:
             raise ValidationError('Email already exists')
+
+
+class UpdateAcctForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(),
+                           Length(min=3, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Update')
+
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            from blog import db
+            user = User.objects(username=username.data).first()
+            if user:
+                raise ValidationError('User already exists')
+
+    def validate_email(self, email):
+        if username.data != current_user.username:
+            from blog import db
+            email = User.objects(email=email.data).first()
+            if email:
+                raise ValidationError('Email already exists')
 
 
 class LoginForm(FlaskForm):

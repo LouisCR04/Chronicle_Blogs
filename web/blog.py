@@ -2,7 +2,8 @@
 """
 Main Flask Router
 """
-from flask import Flask, render_template, url_for, flash, redirect
+from flask import Flask, render_template, url_for, flash, redirect, \
+abort, request
 from flask_login import LoginManager, login_user, current_user, \
 logout_user, login_required
 from forms.forms import RegForm, LoginForm, PostsForm
@@ -83,7 +84,8 @@ def posts():
                     author=current_user).save()
         flash('Post successfuly created', 'success')
         return redirect(url_for('home'))
-    return render_template("posts.html", title='Post', form=form)
+    return render_template("c_post.html", title='Post', form=form,
+                           legend='New Post')
 
 @app.route("/logedin")
 def loged_in():
@@ -102,6 +104,33 @@ def logout():
 def account():
     return render_template("account.html", title='My account')
 
+@app.route("/post/int: <post_id>")
+def post(post_id):
+    post = Post.objects(id=post_id).first()
+    if not post:
+        return "Post not found", 404
+    return render_template('post.html', title=post.title, post=post)
+
+@app.route("/post/int: <post_id>/update", methods=['GET', 'POST'])
+@login_required
+def upd_post(post_id):
+    post = Post.objects(id=post_id).first()
+    if not post:
+        return "Post not found", 404
+    if post.author != current_user:
+        abort(403)
+    form = PostsForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        post.save()
+        flash('Post has successfully been updated!', 'success')
+        return redirect(url_for('post', post_id=post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+    return render_template('c_post.html', title='Update Post',
+                           form=form, legend='Update Post')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

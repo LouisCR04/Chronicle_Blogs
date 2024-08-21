@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+        <h1>This is My Soul Society!</h1>
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ post.author.username }}</a>
+              <small class="text-muted">{{ post.date_posted.strftime('%B %d, %Y') }}</small>
+            </div>
+            <h2 class="article-title">{{ post.title }}</h2>
+            <p class="article-content">{{ post.content }}</p>
+          </div>
+        </article>
+{% endblock content %}

@@ -79,8 +79,8 @@ def login():
 def posts():
     form = PostsForm()
     if form.validate_on_submit():
-        """post = Post(title=form.title.data, content=form.content.data,
-                    author=current_user)"""
+        post = Post(title=form.title.data, content=form.content.data,
+                    author=current_user).save()
         flash('Post successfuly created', 'success')
         return redirect(url_for('home'))
     return render_template("posts.html", title='Post', form=form)

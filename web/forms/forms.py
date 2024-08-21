@@ -2,6 +2,7 @@
 forms file
 """
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField,\
 TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
@@ -41,6 +42,8 @@ class UpdateAcctForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(),
                            Length(min=3, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    picture = FileField('Update Prof Pic', validators=\
+    [FileAllowed(['jpg', 'png'], '.jpg and .png only')])
     submit = SubmitField('Update')
 
     def validate_username(self, username):
@@ -51,7 +54,7 @@ class UpdateAcctForm(FlaskForm):
                 raise ValidationError('User already exists')
 
     def validate_email(self, email):
-        if username.data != current_user.username:
+        if email.data != current_user.email:
             from blog import db
             email = User.objects(email=email.data).first()
             if email:

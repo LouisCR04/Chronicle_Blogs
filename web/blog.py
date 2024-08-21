@@ -2,6 +2,7 @@
 """
 Main Flask Router
 """
+import os
 from flask import Flask, render_template, url_for, flash, redirect, \
 abort, request
 from flask_login import LoginManager, login_user, current_user, \
@@ -100,6 +101,13 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
     
+def save_pic(form_picture, username):
+    _, f_ext = os.path.splitext(form_picture.filename)
+    pic_name = username + f_ext
+    pic_path = os.path.join(app.root_path, 'static/prof_pics', pic_name)
+    form_picture.save(pic_path)
+    return pic_name
+
 
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
@@ -108,8 +116,10 @@ def account():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
-        #current_user.image_file = form.image_file.data
-        User.save()
+        if form.picture.data:
+            pic_file = save_pic(form.picture.data, current_user.username)
+            current_user.image_file = pic_file
+        current_user.save()
         flash('Account Updated Successfully', 'success')
         return redirect(url_for('account'))
     elif request.method == 'GET':

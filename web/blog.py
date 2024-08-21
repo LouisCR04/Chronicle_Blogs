@@ -39,8 +39,7 @@ def load_user(user_id):
 @app.route("/home")
 def home():
     posts = Post.objects.all()
-    p_img = url_for('static', filename='post_pics/default.jpg')
-    return render_template("home.html", posts=posts, post_image=p_img)
+    return render_template("home.html", posts=posts)
 
 
 @app.route("/about")

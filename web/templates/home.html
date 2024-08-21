@@ -6,7 +6,7 @@
         {% for post in posts %}
         <div class="col-md-4 mb-4">
             <div class="card">
-                <img src="{{ post_image }}" class="card-img-top" alt="{{ post.author.username }}">
+                <img src="static/post_pics/img{{ loop.index % 7 + 1 }}.jpg" class="card-img-top" alt="{{ post.author.username }}">
 		<small class="text-muted">{{ post.date_posted.strftime('%B %d, %Y') }}</small>
                 <div class="card-body">
                     <h5 class="card-title">{{ post.title }}</h5>

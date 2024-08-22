@@ -13,6 +13,7 @@ from models.engine.database import User, Post
 from models.engine.db_config import mon_con
 from flask_bcrypt import Bcrypt
 from flask_paginate import Pagination
+from mongoengine import Q
 
 
 app = Flask(__name__)
@@ -37,12 +38,15 @@ def load_user(user_id):
 def home():
     page = int(request.args.get('page', 1))
     per_page = 6
-    posts_query = Post.objects
+    query = request.args.get('query', '')
+
+    posts_query = Post.objects(Q(title__icontains=query))
+
     total = posts_query.count()
     posts = posts_query.skip((page - 1) * per_page).limit(per_page)
     pagination = Pagination(page=page, per_page=per_page,
                             total=total, record_name='posts')
-    return render_template("home.html", posts=posts, pagination=pagination)
+    return render_template("home.html", posts=posts, pagination=pagination, query=query)
 
 
 @app.route("/about")

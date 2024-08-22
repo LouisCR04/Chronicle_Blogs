@@ -1,21 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
-	<h1>Welcome to Chronicle Blogs!</h1>
-	<div class="container">
-    <div class="row">
-        {% for post in posts %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="static/post_pics/img{{ loop.index % 7 + 1 }}.jpg" class="card-img-top" alt="{{ post.author.username }}">
-		<small class="text-muted">{{ post.date_posted.strftime('%B %d, %Y') }}</small>
-                <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <p class="card-text">{{ post.content[:100] }}...</p>
-                    <a href="{{ url_for('post', post_id=post.id) }}" class="btn btn-primary">Read More</a>
+    <h1>Welcome to Chronicle Blogs!</h1>
+    <div class="container">
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="static/post_pics/img{{ loop.index % 7 + 1 }}.jpg" class="card-img-top" alt="{{ post.author.username }}">
+                    <small class="text-muted">{{ post.date_posted.strftime('%B %d, %Y') }}</small>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.content[:100] }}...</p>
+                        <a href="{{ url_for('post', post_id=post.id) }}" class="btn btn-primary">Read More</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        <nav aria-label="Page navigation">
+            {{ pagination.links }}
+        </nav>
     </div>
-</div>
 {% endblock content %}
+

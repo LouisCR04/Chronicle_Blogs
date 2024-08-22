@@ -4,9 +4,16 @@ Mock data creation for the database
 """
 from models.engine.database import User, Post
 from models.engine.db_config import mon_con
+import json
+from flask_bcrypt import Bcrypt
 
-# Create a new user
-user = User(username='Aizen Souske', password='password1', email='aizen@demo.com').save()
+bcrypt = Bcrypt()
 
-# Create a new post
-post = Post(author=user, title='Hogyoku', content='Infinite Reiatsu, True power').save()
+with open('USER_MOCK_DATA.json', 'r') as file:
+    users = json.load(file)
+
+for user in users:
+    hashed_password = bcrypt.generate_password_hash(user['password']).decode('utf-8')
+    user = User(username=user['username'], 
+                password=hashed_password, 
+                email=user['email']).save()

@@ -15,10 +15,6 @@ from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
-"""
-import os
-SECRET_KEY = os.urandom(32)
-"""
 app.config['SECRET_KEY'] = '06a0233352eacd9d1c3133047eef7c10'
 app.config['MONGODB_SETTINGS'] = {
     'db': 'f_blog',

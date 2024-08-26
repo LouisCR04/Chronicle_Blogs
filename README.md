@@ -26,31 +26,17 @@ Chronicle Blogs is a dynamic and modern blogging web application that allows use
     cd chronicle-blogs
     ```
 
-2. **Create a virtual environment:**
+2. **Set up environment variables:**
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    PYTHONPATH=.
     ```
 
-3. **Install dependencies:**
+3. **Run the application:**
     ```bash
-    pip install -r requirements.txt
+    ./web/blog.py
     ```
 
-4. **Set up environment variables:**
-    - Create a `.env` file in the root directory and add the following:
-    ```bash
-    FLASK_APP=run.py
-    FLASK_ENV=development
-    SECRET_KEY=your_secret_key
-    ```
-
-5. **Run the application:**
-    ```bash
-    flask run
-    ```
-
-6. **Access the application:**
+4. **Access the application:**
     - Open your browser and go to `http://127.0.0.1:5000`
 
 ## Usage
